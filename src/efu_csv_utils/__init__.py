@@ -57,7 +57,7 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
     return rows, header_fields, newline
 
 
-def parse_efu_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, Any]]:
+def efu_to_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, Any]]:
     """Parse an EFU file and return a list of row dictionaries.
 
     Empty fields are converted to ``None`` and purely digit strings are

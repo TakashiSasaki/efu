@@ -3,10 +3,10 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
-from efu_csv_utils import parse_efu_objects
+from efu_csv_utils import efu_to_objects
 
 
-def test_parse_efu_objects(tmp_path):
+def test_efu_to_objects(tmp_path):
     csv_content = (
         "Filename,Size,Date Modified,Date Created,Attributes\r\n"
         "\"C:\\msys64\",,133876022280081366,133739602603410395,16\r\n"
@@ -16,7 +16,7 @@ def test_parse_efu_objects(tmp_path):
     sample_file = tmp_path / "sample.efu"
     sample_file.write_text(csv_content, newline="")
 
-    objs = parse_efu_objects(str(sample_file))
+    objs = efu_to_objects(str(sample_file))
 
     assert objs == [
         {
