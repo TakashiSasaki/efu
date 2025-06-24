@@ -8,7 +8,46 @@ identical to the original.
 
 __version__ = "0.1.0"
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
+
+
+class EfuRecord(dict):
+    """Dictionary-like record initialized with EFU header fields.
+
+    Parameters
+    ----------
+    headers:
+        Iterable of header field names. An entry is created for each key
+        with the value ``None`` by default.
+    data:
+        Optional mapping of initial values which are applied after the
+        default keys are created.
+    last_seen, first_seen, last_lost:
+        Optional Windows FILETIME integers associated with the record.
+    **kwargs:
+        Additional key/value pairs to update the record with.
+    """
+
+    __slots__ = ("last_seen", "first_seen", "last_lost")
+
+    def __init__(
+        self,
+        headers: Iterable[str],
+        data: Optional[Mapping[str, Any]] = None,
+        *,
+        last_seen: int = 0,
+        first_seen: int = 0,
+        last_lost: int = 0,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__({key: None for key in headers})
+        if data:
+            self.update(data)
+        if kwargs:
+            self.update(kwargs)
+        self.last_seen = last_seen
+        self.first_seen = first_seen
+        self.last_lost = last_lost
 
 
 def efu_to_array(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], List[str], str]:

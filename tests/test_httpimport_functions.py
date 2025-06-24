@@ -8,7 +8,7 @@ REMOTE_URL = 'https://raw.githubusercontent.com/TakashiSasaki/efu/refs/heads/mai
 @pytest.fixture(scope='session')
 def remote_efu():
     with httpimport.remote_repo(url=REMOTE_URL):
-        module = importlib.import_module('efu_csv_utils')
+        module = importlib.import_module('efu')
     return module
 
 
