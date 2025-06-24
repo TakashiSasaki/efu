@@ -105,10 +105,10 @@ def write_efu(
   * Fields with leading/trailing spaces are treated as text and quoted.
   * Zero-length value (`''`) always written as empty (no quotes): `, ,` yields `,,`.
 
-### 2.3 `parse_efu_objects`
+### 2.3 `efu_to_objects`
 
 ```python
-def parse_efu_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, Any]]
+def efu_to_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, Any]]
 ```
 
 * **Returns**: List of dictionaries using header names as keys. Empty fields become
@@ -144,7 +144,7 @@ write_efu(rows, header_fields, 'output.efu', newline=nl)
 ## 5. Limitations
 
 * `parse_efu` does not convert numeric strings to Python numeric types; use
-  `parse_efu_objects` for typed values.
+  `efu_to_objects` for typed values.
 * ISO/locale-specific encodings other than UTF-8 must be specified.
 * No streaming: entire file is loaded into memory; may not scale for extremely large EFU files.
 
