@@ -1,5 +1,6 @@
 import pathlib
 import sys
+import os
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
@@ -45,3 +46,28 @@ def test_efu_record_attributes():
     assert rec2.last_seen == 1
     assert rec2.first_seen == 2
     assert rec2.last_lost == 3
+
+
+def test_populate_from_path(tmp_path):
+    header = [
+        "Filename",
+        "Size",
+        "Date Modified",
+        "Date Created",
+        "Attributes",
+    ]
+    sample = tmp_path / "file.txt"
+    sample.write_text("hello")
+
+    rec = EfuRecord(header)
+    rec.populate_from_path(str(sample))
+
+    st = os.stat(sample)
+    expected_modified = int(st.st_mtime * 10_000_000) + 116444736000000000
+    expected_created = int(st.st_ctime * 10_000_000) + 116444736000000000
+
+    assert rec["Filename"] == str(sample)
+    assert rec["Size"] == st.st_size
+    assert rec["Date Modified"] == expected_modified
+    assert rec["Date Created"] == expected_created
+    assert rec["Attributes"] == 32
