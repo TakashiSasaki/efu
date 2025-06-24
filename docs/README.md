@@ -19,10 +19,10 @@ This document describes the design, behavior, and API of the `efu_csv_utils.py` 
 
 ## 2. API
 
-### 2.1 `parse_efu`
+### 2.1 `efu_to_array`
 
 ```python
-def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], str, str]
+def efu_to_array(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], str, str]
 ```
 
 * **Inputs**:
@@ -55,10 +55,10 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
   * Lines with consecutive commas produce empty-string fields (`''`).
   * Fields containing commas or quotes must be quoted and escaped in source; parser handles that.
 
-### 2.2 `write_efu`
+### 2.2 `array_to_efu`
 
 ```python
-def write_efu(
+def array_to_efu(
     rows: List[List[str]],
     header_fields: List[str],
     file_path: str,
@@ -69,7 +69,7 @@ def write_efu(
 
 * **Inputs**:
 
-  * `rows` (`List[List[str]]`): Data rows (from `parse_efu`), each a list of field strings.
+  * `rows` (`List[List[str]]`): Data rows (from `efu_to_array`), each a list of field strings.
   * `header_fields` (`List[str]`): Header row values split on commas.
   * `file_path` (`str`): Destination path for the output EFU file.
   * `newline` (`str`, optional): Newline sequence to use for data rows; defaults to `'\n'` if not provided.
@@ -136,7 +136,7 @@ def objects_to_efu(
 
   1. Header fields are taken from the keys of the first object.
   2. Values are converted to strings with ``str()`` (``None`` -> ``''``).
-  3. Delegates to `write_efu` for final serialization.
+  3. Delegates to `array_to_efu` for final serialization.
 
 ---
 
@@ -151,8 +151,8 @@ Filename,Size,Date Modified,Date Created,Attributes\r\n
 ```
 
 ```python
-rows, header_fields, nl = parse_efu('input.efu')
-write_efu(rows, header_fields, 'output.efu', newline=nl)
+rows, header_fields, nl = efu_to_array('input.efu')
+array_to_efu(rows, header_fields, 'output.efu', newline=nl)
 # 'output.efu' is now byte-for-byte identical to 'input.efu'
 ```
 
@@ -167,7 +167,7 @@ write_efu(rows, header_fields, 'output.efu', newline=nl)
 
 ## 5. Limitations
 
-* `parse_efu` does not convert numeric strings to Python numeric types; use
+* `efu_to_array` does not convert numeric strings to Python numeric types; use
   `efu_to_objects` for typed values.
 * ISO/locale-specific encodings other than UTF-8 must be specified.
 * No streaming: entire file is loaded into memory; may not scale for extremely large EFU files.

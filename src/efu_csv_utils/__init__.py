@@ -11,7 +11,7 @@ __version__ = "0.1.0"
 from typing import Any, Dict, List, Optional, Tuple
 
 
-def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], List[str], str]:
+def efu_to_array(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], List[str], str]:
     """
     Parse an Everything EFU (CSV) file into a list of rows (excluding header),
     returning rows, the header fields as a list of strings, and detected newline style.
@@ -71,7 +71,7 @@ def efu_to_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, An
     converted to ``int``. Keys are taken from the header row.
     """
 
-    rows, header_fields, _ = parse_efu(file_path, encoding=encoding)
+    rows, header_fields, _ = efu_to_array(file_path, encoding=encoding)
 
     objects: List[Dict[str, Any]] = []
     for row in rows:
@@ -99,7 +99,7 @@ def objects_to_efu(
 
     The header fields are derived from the keys of the first object and values
     are converted to strings using ``str()``. ``None`` becomes an empty field.
-    The output formatting matches :func:`write_efu`.
+    The output formatting matches :func:`array_to_efu`.
     """
 
     if not objects:
@@ -117,10 +117,10 @@ def objects_to_efu(
                 row.append(str(value))
         rows.append(row)
 
-    write_efu(rows, header_fields, file_path, newline=newline, encoding=encoding)
+    array_to_efu(rows, header_fields, file_path, newline=newline, encoding=encoding)
 
 
-def write_efu(rows: List[List[str]], header_fields: List[str], file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
+def array_to_efu(rows: List[List[str]], header_fields: List[str], file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
     """
     Serialize rows to EFU file preserving newline style.
     The header is supplied as a list of strings which will be joined with commas
@@ -159,8 +159,8 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("output", help="Path to write the output EFU file")
     args = parser.parse_args(argv)
 
-    rows, header_fields, nl = parse_efu(args.input)
-    write_efu(rows, header_fields, args.output, newline=nl)
+    rows, header_fields, nl = efu_to_array(args.input)
+    array_to_efu(rows, header_fields, args.output, newline=nl)
 
     # Verify round-trip
     with open(args.input, "rb") as f:

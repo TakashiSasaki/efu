@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
-from efu_csv_utils import parse_efu
+from efu_csv_utils import efu_to_array
 
 
 def test_parse_efu_simple(tmp_path):
@@ -17,7 +17,7 @@ def test_parse_efu_simple(tmp_path):
     sample_file = tmp_path / "sample.efu"
     sample_file.write_text(csv_content, newline="")
 
-    rows, header, nl = parse_efu(str(sample_file))
+    rows, header, nl = efu_to_array(str(sample_file))
 
     assert header == [
         "Filename",
