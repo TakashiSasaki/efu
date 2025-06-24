@@ -7,4 +7,4 @@ def test_import_remote_efu_module():
     with httpimport.remote_repo(url=url):
         module = importlib.import_module('efu')
         assert hasattr(module, '__version__')
-        assert module.__version__ == '0.1.0'
+        assert module.__version__ == '0.1.1'
