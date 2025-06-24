@@ -82,6 +82,37 @@ def efu_to_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, An
     return objects
 
 
+def objects_to_efu(
+    objects: List[Dict[str, Any]],
+    file_path: str,
+    newline: Optional[str] = None,
+    encoding: str = 'utf-8',
+) -> None:
+    """Serialize a list of dictionaries to an EFU CSV file.
+
+    The header fields are derived from the keys of the first object and values
+    are converted to strings using ``str()``. ``None`` becomes an empty field.
+    The output formatting matches :func:`write_efu`.
+    """
+
+    if not objects:
+        raise ValueError("objects list must not be empty")
+
+    header_fields = list(objects[0].keys())
+    rows: List[List[str]] = []
+    for obj in objects:
+        row: List[str] = []
+        for key in header_fields:
+            value = obj.get(key)
+            if value is None:
+                row.append("")
+            else:
+                row.append(str(value))
+        rows.append(row)
+
+    write_efu(rows, header_fields, file_path, newline=newline, encoding=encoding)
+
+
 def write_efu(rows: List[List[str]], header_fields: List[str], file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
     """
     Serialize rows to EFU file preserving newline style.

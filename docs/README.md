@@ -114,6 +114,30 @@ def efu_to_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, An
 * **Returns**: List of dictionaries using header names as keys. Empty fields become
   `None` and digit-only fields are converted to `int`.
 
+### 2.4 `objects_to_efu`
+
+```python
+def objects_to_efu(
+    objects: List[Dict[str, Any]],
+    file_path: str,
+    newline: Optional[str] = None,
+    encoding: str = 'utf-8'
+) -> None
+```
+
+* **Inputs**:
+
+  * `objects` (`List[Dict[str, Any]]`): Row dictionaries. ``None`` values become empty fields.
+  * `file_path` (`str`): Destination EFU file path.
+  * `newline` (`str`, optional): Newline sequence for data rows; default `'\n'`.
+  * `encoding` (`str`, optional): Text encoding (default `'utf-8'`).
+
+* **Behavior**:
+
+  1. Header fields are taken from the keys of the first object.
+  2. Values are converted to strings with ``str()`` (``None`` -> ``''``).
+  3. Delegates to `write_efu` for final serialization.
+
 ---
 
 ## 3. Examples
