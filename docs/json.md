@@ -6,6 +6,22 @@ Filename,Size,Date Modified,Date Created,Attributes
 "C:\msys64\clang64",0,133665511886007850,133665511886007850,16
 ```
 
+# リストのリストに変換した例
+
+## 1行目
+```python
+["Filename", "Size", "Date Modified", "Date Created", "Attributes"]
+```
+
+## 2行目以降
+```python
+[
+    ["C:\\msys64", None, 133876022280081366, 133739602603410395, 16],
+    ["C:\\msys64\\autorebase.bat", 82, 133262362720000000, 133739602600000000, 32],
+    ["C:\\msys64\\clang64", 0, 133665511886007850, 133665511886007850, 16]
+]
+```
+
 # JSON に変換した例
 
 ```json
