@@ -1,5 +1,12 @@
-# efu_csv_utils.py
-# Custom CSV parser and serializer for Everything EFU files
+"""Utilities for parsing and writing Everything EFU CSV files.
+
+The functions provided here allow EFU files to be parsed into Python objects and
+written back without losing information. Newline style and quoting are preserved
+so that a file round‐tripped through this library will be byte‐for‐byte
+identical to the original.
+"""
+
+__version__ = "0.1.0"
 
 from typing import Any, Dict, List, Optional, Tuple
 

@@ -2,7 +2,8 @@
 name = "efu-csv-utils"
 version = "0.1.0"
 description = "Custom CSV parser and serializer for Everything EFU files"
-authors = ["Example Author <author@example.com>"]
+authors = ["Takashi Sasaki <takashi316@gmail.com>"]
+readme = "README.md"
 packages = [{include = "efu_csv_utils", from = "src"}]
 
 [tool.poetry.dependencies]
