@@ -6,7 +6,7 @@ This package provides helper functions for losslessly converting between Everyth
 
 ## Documentation
 
-- [Specification](docs/README.md)
+- [Specification](docs/REFERENCE.md)
 - [Time Columns](docs/filetime.md)
 - [Attribute Flags](docs/attribute-flags.md)
 - [JSON Example](docs/json.md)
