@@ -10,7 +10,7 @@ This document describes the design, behavior, and API of the `efu_csv_utils.py` 
 * **Key Features**:
 
   * Detects and preserves original newline style (`\r\n` or `\n`).
-  * Reads header line raw and writes it back unchanged.
+  * Reads header line, splits it into fields, and reconstructs it when writing.
   * Parses quoted and unquoted fields correctly, handling escaped quotes (`""`).
   * Distinguishes between numeric fields, empty fields (NULL), and string fields for quoting rules.
   * Serializes data rows to preserve exact structure: unquoted numeric and empty fields, quoted text fields.
@@ -33,13 +33,13 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
 * **Outputs (tuple)**:
 
   1. `rows` (`List[List[str]]`): A list of data rows (each a list of field strings). The header row is excluded.
-  2. `header_raw` (`str`): The exact header line as read, including its terminating newline.
+  2. `header_fields` (`List[str]`): Header row split on commas.
   3. `newline` (`str`): The detected newline sequence in the file (`'\r\n'` or `'\n'`).
 
 * **Behavior**:
 
   1. Reads entire file in binary to detect newline style.
-  2. Opens file in text mode to read the header line (`header_raw`) plus remainder (`rest`).
+  2. Opens file in text mode to read the header line (split into `header_fields`) plus remainder (`rest`).
   3. Splits `rest` by the detected newline.
   4. For each non-empty line:
 
@@ -60,7 +60,7 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
 ```python
 def write_efu(
     rows: List[List[str]],
-    header_raw: str,
+    header_fields: List[str],
     file_path: str,
     newline: Optional[str] = None,
     encoding: str = 'utf-8'
@@ -70,7 +70,7 @@ def write_efu(
 * **Inputs**:
 
   * `rows` (`List[List[str]]`): Data rows (from `parse_efu`), each a list of field strings.
-  * `header_raw` (`str`): Original header line including newline, to write back unchanged.
+  * `header_fields` (`List[str]`): Header row values split on commas.
   * `file_path` (`str`): Destination path for the output EFU file.
   * `newline` (`str`, optional): Newline sequence to use for data rows; defaults to `'\n'` if not provided.
   * `encoding` (`str`, optional): Text encoding for file I/O (default `'utf-8'`).
@@ -78,7 +78,7 @@ def write_efu(
 * **Behavior**:
 
   1. Opens `file_path` in write-text mode with `newline=''` to control newlines manually.
-  2. Writes `header_raw` verbatim.
+  2. Writes the header reconstructed from `header_fields`.
   3. For each row in `rows`:
 
      * For each field string:
@@ -118,8 +118,8 @@ Filename,Size,Date Modified,Date Created,Attributes\r\n
 ```
 
 ```python
-rows, header_raw, nl = parse_efu('input.efu')
-write_efu(rows, header_raw, 'output.efu', newline=nl)
+rows, header_fields, nl = parse_efu('input.efu')
+write_efu(rows, header_fields, 'output.efu', newline=nl)
 # 'output.efu' is now byte-for-byte identical to 'input.efu'
 ```
 
