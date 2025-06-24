@@ -9,7 +9,7 @@ from efu_csv_utils import parse_efu, write_efu
 
 def test_roundtrip(tmp_path):
     root = pathlib.Path(__file__).resolve().parents[1]
-    sample = root / 'sample1.efu'
+    sample = root / 'samples' / 'sample1.efu'
 
     rows, header_raw, nl = parse_efu(str(sample))
     out_file = tmp_path / 'out.efu'
