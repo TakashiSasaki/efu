@@ -1,14 +1,14 @@
 # efu_csv_utils.py
 # Custom CSV parser and serializer for Everything EFU files
 
-import os
 from typing import List, Optional, Tuple
 
 
-def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], str, str]:
+def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], List[str], str]:
     """
     Parse an Everything EFU (CSV) file into a list of rows (excluding header),
-    return rows, raw header line (including newline), and detected newline style.
+    returning rows, the header fields as a list of strings, and detected newline style.
+    The header line itself is split on commas without any CSV escaping rules.
     """
     # Read raw bytes to detect newline and header line
     with open(file_path, 'rb') as f:
@@ -19,6 +19,7 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
     with open(file_path, 'r', encoding=encoding, newline='') as f:
         # Read header raw (first line with newline)
         header_raw = f.readline()
+        header_fields = header_raw.rstrip('\r\n').split(',')
         # Read rest of content
         rest = f.read()
 
@@ -53,14 +54,14 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
         # append the last field
         row.append(''.join(field))
         rows.append(row)
-    return rows, header_raw, newline
+    return rows, header_fields, newline
 
 
-def write_efu(rows: List[List[str]], header_raw: str, file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
+def write_efu(rows: List[List[str]], header_fields: List[str], file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
     """
-    Serialize rows to EFU file preserving newline style,
-    writing original header raw, then quoting data rows appropriately.
-    - header_raw: original header line with its newline
+    Serialize rows to EFU file preserving newline style.
+    The header is supplied as a list of strings which will be joined with commas
+    and terminated with the chosen newline sequence.
     - newline: style for data rows (default '\n')
     """
     nl = newline or '\n'
@@ -72,8 +73,8 @@ def write_efu(rows: List[List[str]], header_raw: str, file_path: str, newline: O
         return not value.isdigit()
 
     with open(file_path, 'w', encoding=encoding, newline='') as f:
-        # Write original header unchanged
-        f.write(header_raw)
+        # Write header constructed from fields
+        f.write(','.join(header_fields) + nl)
         # Write data rows
         for row in rows:
             out_fields: List[str] = []
@@ -95,8 +96,8 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("output", help="Path to write the output EFU file")
     args = parser.parse_args(argv)
 
-    rows, header_raw, nl = parse_efu(args.input)
-    write_efu(rows, header_raw, args.output, newline=nl)
+    rows, header_fields, nl = parse_efu(args.input)
+    write_efu(rows, header_fields, args.output, newline=nl)
 
     # Verify round-trip
     with open(args.input, "rb") as f:
