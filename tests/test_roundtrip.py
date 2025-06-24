@@ -11,9 +11,9 @@ def test_roundtrip(tmp_path):
     root = pathlib.Path(__file__).resolve().parents[1]
     sample = root / 'samples' / 'sample1.efu'
 
-    rows, header_raw, nl = parse_efu(str(sample))
+    rows, header_fields, nl = parse_efu(str(sample))
     out_file = tmp_path / 'out.efu'
-    write_efu(rows, header_raw, str(out_file), newline=nl)
+    write_efu(rows, header_fields, str(out_file), newline=nl)
 
     with open(sample, 'rb') as f:
         original = f.read()
