@@ -139,5 +139,18 @@ write_efu(rows, header_raw, 'output.efu', newline=nl)
 * No streaming: entire file is loaded into memory; may not scale for extremely large EFU files.
 
 ---
+## Installation and Usage with Poetry
+
+This project uses [Poetry](https://python-poetry.org/) for packaging and dependency management. After installing Poetry, run:
+
+```bash
+poetry install
+```
+
+The command installs the `efu-csv-utils` package from `src` in Poetry's virtual environment. Use `poetry run` to execute scripts that depend on the library:
+
+```bash
+poetry run python examples/my_script.py
+```
 
 *End of specification.*
