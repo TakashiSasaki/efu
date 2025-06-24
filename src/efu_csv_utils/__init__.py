@@ -86,20 +86,28 @@ def write_efu(rows: List[List[str]], header_raw: str, file_path: str, newline: O
             f.write(','.join(out_fields) + nl)
 
 
-if __name__ == '__main__':
-    # Example usage
-    input_path = '/mnt/data/133.71.3.4-home.efu'
-    output_path = '/mnt/data/133.71.3.4-home_custom.efu'
+def main(argv: Optional[List[str]] = None) -> None:
+    """Command line interface for parsing and writing EFU files."""
+    import argparse
 
-    rows, header_raw, nl = parse_efu(input_path)
-    write_efu(rows, header_raw, output_path, newline=nl)
+    parser = argparse.ArgumentParser(description="Parse and write EFU files")
+    parser.add_argument("input", help="Path to the input EFU file")
+    parser.add_argument("output", help="Path to write the output EFU file")
+    args = parser.parse_args(argv)
+
+    rows, header_raw, nl = parse_efu(args.input)
+    write_efu(rows, header_raw, args.output, newline=nl)
 
     # Verify round-trip
-    with open(input_path, 'rb') as f:
+    with open(args.input, "rb") as f:
         orig = f.read()
-    with open(output_path, 'rb') as f:
+    with open(args.output, "rb") as f:
         new = f.read()
     if orig == new:
-        print('Round-trip successful: files are identical')
+        print("Round-trip successful: files are identical")
     else:
-        print('Round-trip failed: files differ')
+        print("Round-trip failed: files differ")
+
+
+if __name__ == "__main__":
+    main()
