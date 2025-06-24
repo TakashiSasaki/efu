@@ -1,6 +1,6 @@
 # REMOTE Import Usage Guide
 
-This document explains how to import the `efu_csv_utils` package directly from the remote repository using the `httpimport` package. This approach allows you to use the library without installing it locally.
+This document explains how to import the `efu` package directly from the remote repository using the `httpimport` package. This approach allows you to use the library without installing it locally.
 
 ---
 
@@ -17,26 +17,26 @@ pip install httpimport
 
 ## Basic Usage
 
-1. Define the URL to the directory containing `efu_csv_utils` on GitHub:
+1. Define the URL to the directory containing `efu` on GitHub:
 
 ```python
 REMOTE_URL = "https://raw.githubusercontent.com/TakashiSasaki/efu/refs/heads/main/src/"
 ```
 
-2. Use `httpimport.remote_repo` as a context manager and import `efu_csv_utils`:
+2. Use `httpimport.remote_repo` as a context manager and import `efu`:
 
 ```python
 import importlib
 import httpimport
 
 with httpimport.remote_repo(url=REMOTE_URL):
-    efu_csv_utils = importlib.import_module("efu_csv_utils")
+    efu = importlib.import_module("efu")
 ```
 
 3. Call functions from the imported module as usual:
 
 ```python
-rows, header_fields, nl = efu_csv_utils.efu_to_array("sample.efu")
+rows, header_fields, nl = efu.efu_to_array("sample.efu")
 ```
 
 ## Notes

@@ -1,6 +1,6 @@
 # EFU CSV Parser and Serializer Specification
 
-This document describes the design, behavior, and API of the `efu_csv_utils.py` library, which provides custom parsing and serialization of Everything EFU (CSV) files for lossless round-trip processing.
+This document describes the design, behavior, and API of the `efu` module, which provides custom parsing and serialization of Everything EFU (CSV) files for lossless round-trip processing.
 
 ---
 
@@ -181,7 +181,7 @@ This project uses [Poetry](https://python-poetry.org/) for packaging and depende
 poetry install
 ```
 
-The command installs the `efu-csv-utils` package from `src` in Poetry's virtual environment. Use `poetry run` to execute scripts that depend on the library:
+The command installs the `efu` package from `src` in Poetry's virtual environment. Use `poetry run` to execute scripts that depend on the library:
 
 ```bash
 poetry run python examples/my_script.py

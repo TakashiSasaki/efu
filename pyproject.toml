@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "efu-csv-utils"
+name = "efu"
 version = "0.1.0"
 description = "Custom CSV parser and serializer for Everything EFU files"
 authors = ["Takashi Sasaki <takashi316@gmail.com>"]
 readme = "README.md"
-packages = [{include = "efu_csv_utils", from = "src"}]
+packages = [{include = "efu", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 
 [tool.poetry.scripts]
-efu-csv-utils = "efu_csv_utils:main"
+efu = "efu:main"
 
 [build-system]
 requires = ["poetry-core"]
