@@ -6,7 +6,7 @@ so that a file round‐tripped through this library will be byte‐for‐byte
 identical to the original.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .efu_record import EfuRecord
 from .efu_to_array import efu_to_array

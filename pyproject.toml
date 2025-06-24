@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "efu"
-version = "0.1.0"
+version = "0.1.1"
 description = "Custom CSV parser and serializer for Everything EFU files"
 authors = ["Takashi Sasaki <takashi316@gmail.com>"]
 readme = "README.md"
