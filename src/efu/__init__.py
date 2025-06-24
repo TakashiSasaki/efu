@@ -9,6 +9,7 @@ identical to the original.
 __version__ = "0.1.1"
 
 from .efu_record import EfuRecord
+from .efu_records import EfuRecords
 from .efu_to_array import efu_to_array
 from .efu_to_objects import efu_to_objects
 from .objects_to_efu import objects_to_efu
@@ -17,6 +18,7 @@ from .cli import main
 
 __all__ = [
     "EfuRecord",
+    "EfuRecords",
     "efu_to_array",
     "efu_to_objects",
     "array_to_efu",
