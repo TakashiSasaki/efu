@@ -1,7 +1,7 @@
 # efu_csv_utils.py
 # Custom CSV parser and serializer for Everything EFU files
 
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 
 def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]], List[str], str]:
@@ -55,6 +55,31 @@ def parse_efu(file_path: str, encoding: str = 'utf-8') -> Tuple[List[List[str]],
         row.append(''.join(field))
         rows.append(row)
     return rows, header_fields, newline
+
+
+def parse_efu_objects(file_path: str, encoding: str = 'utf-8') -> List[Dict[str, Any]]:
+    """Parse an EFU file and return a list of row dictionaries.
+
+    Empty fields are converted to ``None`` and purely digit strings are
+    converted to ``int``. Keys are taken from the header row.
+    """
+
+    rows, header_fields, _ = parse_efu(file_path, encoding=encoding)
+
+    objects: List[Dict[str, Any]] = []
+    for row in rows:
+        obj: Dict[str, Any] = {}
+        for i, header in enumerate(header_fields):
+            value = row[i] if i < len(row) else ""
+            if value == "":
+                obj[header] = None
+            elif value.isdigit():
+                obj[header] = int(value)
+            else:
+                obj[header] = value
+        objects.append(obj)
+
+    return objects
 
 
 def write_efu(rows: List[List[str]], header_fields: List[str], file_path: str, newline: Optional[str] = None, encoding: str = 'utf-8') -> None:
