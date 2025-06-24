@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
-from efu_csv_utils import array_to_efu
+from efu import array_to_efu
 
 
 def test_write_efu_simple(tmp_path):

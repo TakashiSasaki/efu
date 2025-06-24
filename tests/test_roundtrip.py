@@ -4,7 +4,7 @@ import sys
 # Add package source to path
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
-from efu_csv_utils import efu_to_array, array_to_efu
+from efu import efu_to_array, array_to_efu
 
 
 def test_roundtrip(tmp_path):
