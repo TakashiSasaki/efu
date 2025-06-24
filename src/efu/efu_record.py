@@ -1,10 +1,10 @@
-from typing import Any, Iterable, Mapping, Optional
+from typing import Any, Iterable, Mapping, Optional, Union
 
 
 class EfuRecord(dict):
     """Dictionary-like record initialized with EFU header fields."""
 
-    __slots__ = ("last_seen", "first_seen", "last_lost")
+    __slots__ = ("last_seen", "first_seen", "last_lost", "root")
 
     def __init__(
         self,
@@ -14,6 +14,7 @@ class EfuRecord(dict):
         last_seen: int = 0,
         first_seen: int = 0,
         last_lost: int = 0,
+        root: Optional[Union[str, int]] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__({key: None for key in headers})
@@ -24,3 +25,4 @@ class EfuRecord(dict):
         self.last_seen = last_seen
         self.first_seen = first_seen
         self.last_lost = last_lost
+        self.root = root

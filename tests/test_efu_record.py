@@ -40,8 +40,13 @@ def test_efu_record_attributes():
     assert rec.last_seen == 0
     assert rec.first_seen == 0
     assert rec.last_lost == 0
+    assert rec.root is None
 
-    rec2 = EfuRecord(header, last_seen=1, first_seen=2, last_lost=3)
+    rec2 = EfuRecord(header, last_seen=1, first_seen=2, last_lost=3, root="foo")
     assert rec2.last_seen == 1
     assert rec2.first_seen == 2
     assert rec2.last_lost == 3
+    assert rec2.root == "foo"
+
+    rec3 = EfuRecord(header, root=10)
+    assert rec3.root == 10
