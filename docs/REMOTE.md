@@ -36,7 +36,7 @@ with httpimport.remote_repo(url=REMOTE_URL):
 3. Call functions from the imported module as usual:
 
 ```python
-rows, header_fields, nl = efu_csv_utils.parse_efu("sample.efu")
+rows, header_fields, nl = efu_csv_utils.efu_to_array("sample.efu")
 ```
 
 ## Notes

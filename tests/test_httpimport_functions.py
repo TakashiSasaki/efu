@@ -13,7 +13,7 @@ def remote_efu():
 
 
 def test_parse_efu_simple_remote(tmp_path, remote_efu):
-    parse_efu = remote_efu.parse_efu
+    parse_efu = remote_efu.efu_to_array
 
     csv_content = (
         "Filename,Size,Date Modified,Date Created,Attributes\r\n"
@@ -55,7 +55,7 @@ def test_parse_efu_simple_remote(tmp_path, remote_efu):
 
 
 def test_write_efu_simple_remote(tmp_path, remote_efu):
-    write_efu = remote_efu.write_efu
+    write_efu = remote_efu.array_to_efu
 
     header = [
         'Filename',
@@ -179,8 +179,8 @@ def test_efu_to_objects_remote(tmp_path, remote_efu):
 
 
 def test_roundtrip_remote(tmp_path, remote_efu):
-    parse_efu = remote_efu.parse_efu
-    write_efu = remote_efu.write_efu
+    parse_efu = remote_efu.efu_to_array
+    write_efu = remote_efu.array_to_efu
     root = pathlib.Path(__file__).resolve().parents[1]
     sample = root / 'samples' / 'sample1.efu'
 
