@@ -1,7 +1,10 @@
 import os
 import socket
 import uuid
-from typing import Optional
+from typing import Optional, Any
+import json
+import hashlib
+import base64
 
 
 class Root:
@@ -45,3 +48,13 @@ class Root:
             except Exception:
                 self.path = None
 
+    @staticmethod
+    def canonical_hash(data: Any) -> str:
+        """Return first 10 chars of base64url SHA1 of canonical JSON of ``data``."""
+        json_str = json.dumps(data, separators=(",", ":"), sort_keys=True, ensure_ascii=False)
+        digest = hashlib.sha1(json_str.encode("utf-8")).digest()
+        b64 = base64.urlsafe_b64encode(digest).decode("ascii").rstrip("=")
+        return b64[:10]
+
+    def __str__(self) -> str:
+        return self.hostname=======
