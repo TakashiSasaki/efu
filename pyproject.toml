@@ -8,6 +8,7 @@ packages = [{include = "efu", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+jcs = "^0.2"
 
 [tool.poetry.scripts]
 efu = "efu:main"

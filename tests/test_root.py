@@ -3,6 +3,7 @@ import sys
 import socket
 import base64
 import json
+import jcs
 import uuid
 import hashlib
 import os
@@ -47,7 +48,7 @@ def test_canonical_hash():
     data = {"b": 2, "a": 1}
     h = Root.canonical_hash(data)
 
-    json_str = json.dumps(data, separators=(",", ":"), sort_keys=True, ensure_ascii=False)
-    digest = hashlib.sha1(json_str.encode('utf-8')).digest()
+    json_bytes = jcs.canonicalize(data)
+    digest = hashlib.sha1(json_bytes).digest()
     expected = base64.urlsafe_b64encode(digest).decode('ascii').rstrip('=')[:10]
     assert h == expected
