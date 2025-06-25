@@ -93,3 +93,24 @@ def test_extend_from_directory(tmp_path):
     assert rec_file1["Date Modified"] == expected_modified
     assert rec_file1["Date Created"] == expected_created
     assert rec_file1["Attributes"] == 32
+
+
+def test_extend_repository_root():
+    header = [
+        "Filename",
+        "Size",
+        "Date Modified",
+        "Date Created",
+        "Attributes",
+    ]
+    root = pathlib.Path(__file__).resolve().parents[1]
+
+    records = EfuRecords()
+    records.extend_from_directory(str(root), header)
+
+    filenames = {rec["Filename"] for rec in records}
+    assert str(root) in filenames
+    assert str(root / "README.md") in filenames
+    assert str(root / "pyproject.toml") in filenames
+    assert len(records) >= 3
+
