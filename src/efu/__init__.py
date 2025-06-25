@@ -24,6 +24,7 @@ __all__ = [
     "efu_to_objects",
     "array_to_efu",
     "objects_to_efu",
+    "Root",
     "main",
     "Root",
 ]
