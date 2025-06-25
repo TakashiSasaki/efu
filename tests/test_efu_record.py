@@ -38,9 +38,9 @@ def test_efu_record_with_data():
 def test_efu_record_attributes():
     header = ["Filename"]
     rec = EfuRecord(header)
-    assert rec.last_seen == 0
-    assert rec.first_seen == 0
-    assert rec.last_lost == 0
+    assert rec.last_seen is None
+    assert rec.first_seen is None
+    assert rec.last_lost is None
     assert rec.root is None
 
     rec2 = EfuRecord(header, last_seen=1, first_seen=2, last_lost=3, root="foo")

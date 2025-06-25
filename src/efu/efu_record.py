@@ -21,9 +21,9 @@ class EfuRecord(dict):
         headers: Iterable[str],
         data: Optional[Mapping[str, Any]] = None,
         *,
-        last_seen: int = 0,
-        first_seen: int = 0,
-        last_lost: int = 0,
+        last_seen: Optional[int] = None,
+        first_seen: Optional[int] = None,
+        last_lost: Optional[int] = None,
         root: Optional[Union[str, int]] = None,
         **kwargs: Any,
     ) -> None:
