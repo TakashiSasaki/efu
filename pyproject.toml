@@ -8,7 +8,7 @@ packages = [{include = "efu", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-jcs = "^0.2"
+jcs = ">=0.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = {version = "^6.0", python = ">=3.8.1"}
