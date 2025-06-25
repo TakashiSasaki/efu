@@ -4,6 +4,7 @@ import socket
 import base64
 import json
 import uuid
+import hashlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
