@@ -114,3 +114,10 @@ def test_extend_repository_root():
     assert str(root / "pyproject.toml") in filenames
     assert len(records) >= 3
 
+    for rec in records:
+        assert isinstance(rec["Filename"], str)
+        assert isinstance(rec["Size"], int)
+        assert isinstance(rec["Date Modified"], int)
+        assert isinstance(rec["Date Created"], int)
+        assert isinstance(rec["Attributes"], int)
+
