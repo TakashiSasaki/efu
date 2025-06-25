@@ -6,6 +6,7 @@ import json
 import jcs
 import hashlib
 import base64
+import ipaddress
 
 
 class Root:
@@ -31,10 +32,16 @@ class Root:
             self.mac_address = None
 
         try:
+            self.ip_address = None
             if self.hostname:
-                self.ip_address = socket.gethostbyname(self.hostname)
-            else:
-                self.ip_address = None
+                for info in socket.getaddrinfo(self.hostname, None):
+                    addr = info[4][0]
+                    try:
+                        if not ipaddress.ip_address(addr).is_loopback:
+                            self.ip_address = addr
+                            break
+                    except Exception:
+                        pass
         except Exception:
             self.ip_address = None
 

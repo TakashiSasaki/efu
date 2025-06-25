@@ -25,7 +25,7 @@ def test_hostname_failure(monkeypatch):
         raise OSError('fail')
 
     monkeypatch.setattr(socket, 'gethostname', bad_hostname)
-    monkeypatch.setattr(socket, 'gethostbyname', lambda x: (_ for _ in ()).throw(RuntimeError('should not be called')))
+    monkeypatch.setattr(socket, 'getaddrinfo', lambda *a, **k: (_ for _ in ()).throw(RuntimeError('should not be called')))
     monkeypatch.setattr(uuid, 'getnode', lambda: 0x010203040506)
 
     r = Root('/tmp')
@@ -67,3 +67,33 @@ def test_str(tmp_path):
     s = str(r)
     data = json.loads(s)
     assert data['path'] == str(tmp_path)
+
+
+def test_exclude_loopback(monkeypatch):
+    monkeypatch.setattr(socket, 'gethostname', lambda: 'testhost')
+
+    def fake_addrinfo(*args, **kwargs):
+        return [
+            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('127.0.0.1', 0)),
+            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.0.2.1', 0)),
+        ]
+
+    monkeypatch.setattr(socket, 'getaddrinfo', fake_addrinfo)
+
+    r = Root('/tmp')
+    assert r.ip_address == '192.0.2.1'
+
+
+def test_loopback_only(monkeypatch):
+    monkeypatch.setattr(socket, 'gethostname', lambda: 'testhost')
+    monkeypatch.setattr(
+        socket,
+        'getaddrinfo',
+        lambda *a, **k: [
+            (socket.AF_INET, socket.SOCK_STREAM, 6, '', ('127.0.0.1', 0)),
+            (socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('::1', 0, 0, 0)),
+        ],
+    )
+
+    r = Root('/tmp')
+    assert r.ip_address is None
