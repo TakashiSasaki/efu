@@ -44,7 +44,7 @@ class Root:
                 self.path = None
         else:
             try:
-                self.path = os.getcwd()
+                self.path = os.path.abspath(os.getcwd())
             except Exception:
                 self.path = None
 
