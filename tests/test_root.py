@@ -5,6 +5,7 @@ import base64
 import json
 import uuid
 import hashlib
+import os
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
@@ -34,6 +35,12 @@ def test_hostname_failure(monkeypatch):
 def test_root_initialization():
     root = Root()
     assert root.hostname == socket.gethostname()
+
+
+def test_root_default_path():
+    expected = os.path.abspath(os.getcwd())
+    root = Root()
+    assert root.path == expected
 
 
 def test_canonical_hash():
