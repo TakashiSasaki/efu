@@ -52,3 +52,18 @@ def test_canonical_hash():
     digest = hashlib.sha1(json_bytes).digest()
     expected = base64.urlsafe_b64encode(digest).decode('ascii').rstrip('=')[:10]
     assert h == expected
+
+
+def test_to_json(tmp_path):
+    r = Root(str(tmp_path))
+    js = r.to_json()
+    data = json.loads(js)
+    assert data['path'] == str(tmp_path)
+    assert js == jcs.canonicalize(data).decode('utf-8')
+
+
+def test_str(tmp_path):
+    r = Root(str(tmp_path))
+    s = str(r)
+    data = json.loads(s)
+    assert data['path'] == str(tmp_path)
