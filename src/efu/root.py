@@ -53,10 +53,26 @@ class Root:
     def canonical_hash(data: Any) -> str:
         """Return first 10 chars of base64url SHA1 of canonical JSON of ``data``."""
         json_bytes = jcs.canonicalize(data)
-        json_str = json_bytes.decode("utf-8")
         digest = hashlib.sha1(json_bytes).digest()
         b64 = base64.urlsafe_b64encode(digest).decode("ascii").rstrip("=")
         return b64[:10]
 
+    def to_json(self) -> str:
+        """Return canonical JSON string of this instance."""
+        data = {
+            "hostname": self.hostname,
+            "ip_address": self.ip_address,
+            "mac_address": self.mac_address,
+            "path": self.path,
+        }
+        return jcs.canonicalize(data).decode("utf-8")
+
     def __str__(self) -> str:
-        return self.hostname
+        """Return human readable JSON representation of this instance."""
+        data = {
+            "hostname": self.hostname,
+            "ip_address": self.ip_address,
+            "mac_address": self.mac_address,
+            "path": self.path,
+        }
+        return json.dumps(data, ensure_ascii=False, indent=2)

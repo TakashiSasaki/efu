@@ -15,6 +15,7 @@ from .efu_to_objects import efu_to_objects
 from .objects_to_efu import objects_to_efu
 from .array_to_efu import array_to_efu
 from .cli import main
+from .root_cli import main as root_main
 from .root import Root
 
 __all__ = [
@@ -26,5 +27,6 @@ __all__ = [
     "objects_to_efu",
     "Root",
     "main",
+    "root_main",
     "Root",
 ]

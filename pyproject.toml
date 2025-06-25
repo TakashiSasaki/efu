@@ -17,6 +17,7 @@ httpimport = "^1.4"
 
 [tool.poetry.scripts]
 efu = "efu:main"
+efu_root = "efu.root_cli:main"
 
 [build-system]
 requires = ["poetry-core"]
