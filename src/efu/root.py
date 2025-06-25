@@ -7,6 +7,7 @@ import jcs
 import hashlib
 import base64
 import ipaddress
+import getpass
 
 
 class Root:
@@ -17,11 +18,17 @@ class Root:
         self.mac_address: Optional[str] = None
         self.ip_address: Optional[str] = None
         self.path: Optional[str] = None
+        self.username: Optional[str] = None
 
         try:
             self.hostname = socket.gethostname()
         except Exception:
             self.hostname = None
+
+        try:
+            self.username = getpass.getuser()
+        except Exception:
+            self.username = None
 
         try:
             node = uuid.getnode()
@@ -70,6 +77,7 @@ class Root:
             "hostname": self.hostname,
             "ip_address": self.ip_address,
             "mac_address": self.mac_address,
+            "username": self.username,
             "path": self.path,
         }
         return jcs.canonicalize(data).decode("utf-8")
@@ -80,6 +88,7 @@ class Root:
             "hostname": self.hostname,
             "ip_address": self.ip_address,
             "mac_address": self.mac_address,
+            "username": self.username,
             "path": self.path,
         }
         return json.dumps(data, ensure_ascii=False, indent=2)

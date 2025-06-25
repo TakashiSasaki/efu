@@ -6,6 +6,7 @@ import json
 import jcs
 import uuid
 import hashlib
+import getpass
 import os
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
@@ -18,6 +19,7 @@ def test_root_basic(tmp_path):
     assert r.hostname is None or isinstance(r.hostname, str)
     assert r.ip_address is None or isinstance(r.ip_address, str)
     assert r.mac_address is None or isinstance(r.mac_address, str)
+    assert r.username is None or isinstance(r.username, str)
 
 
 def test_hostname_failure(monkeypatch):
@@ -36,6 +38,7 @@ def test_hostname_failure(monkeypatch):
 def test_root_initialization():
     root = Root()
     assert root.hostname == socket.gethostname()
+    assert root.username == getpass.getuser()
 
 
 def test_root_default_path():
@@ -59,6 +62,7 @@ def test_to_json(tmp_path):
     js = r.to_json()
     data = json.loads(js)
     assert data['path'] == str(tmp_path)
+    assert data['username'] == r.username
     assert js == jcs.canonicalize(data).decode('utf-8')
 
 
@@ -67,6 +71,7 @@ def test_str(tmp_path):
     s = str(r)
     data = json.loads(s)
     assert data['path'] == str(tmp_path)
+    assert data['username'] == r.username
 
 
 def test_exclude_loopback(monkeypatch):
