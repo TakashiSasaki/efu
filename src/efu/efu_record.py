@@ -1,6 +1,7 @@
 from typing import Any, Iterable, Mapping, Optional, Union
 import os
 import stat
+import time
 
 
 FILETIME_EPOCH = 116444736000000000
@@ -38,8 +39,21 @@ class EfuRecord(dict):
         self.root = root
 
     def populate_from_path(self, file_path: str) -> None:
-        """Populate record fields using metadata from ``file_path``."""
-        st = os.stat(file_path)
+        """Populate record fields using metadata from ``file_path``.
+
+        Updates ``last_seen`` when metadata is successfully retrieved and
+        ``last_lost`` when retrieval fails.
+        """
+        try:
+            st = os.stat(file_path)
+        except OSError:
+            self.last_lost = int(time.time())
+            raise
+        else:
+            now = int(time.time())
+            self.last_seen = now
+            if self.first_seen is None:
+                self.first_seen = now
 
         if "Filename" in self:
             self["Filename"] = file_path

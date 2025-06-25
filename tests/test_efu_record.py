@@ -1,6 +1,8 @@
 import pathlib
 import sys
 import os
+import time
+import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
@@ -76,3 +78,57 @@ def test_populate_from_path(tmp_path):
     assert rec["Date Modified"] == expected_modified
     assert rec["Date Created"] == expected_created
     assert rec["Attributes"] == 32
+
+
+def test_populate_updates_last_seen(tmp_path):
+    header = [
+        "Filename",
+        "Size",
+        "Date Modified",
+        "Date Created",
+        "Attributes",
+    ]
+
+    sample = tmp_path / "file.txt"
+    sample.write_text("hello")
+
+    rec = EfuRecord(header)
+    before = int(time.time()) - 1
+    rec.populate_from_path(str(sample))
+    after = int(time.time()) + 1
+
+    assert rec.last_lost is None
+    assert rec.last_seen is not None
+    assert rec.first_seen is not None
+    assert before <= rec.last_seen <= after
+    assert before <= rec.first_seen <= after
+
+
+def test_populate_updates_last_lost(tmp_path):
+    header = ["Filename"]
+    sample = tmp_path / "missing.txt"
+    rec = EfuRecord(header)
+    before = int(time.time()) - 1
+    with pytest.raises(FileNotFoundError):
+        rec.populate_from_path(str(sample))
+    after = int(time.time()) + 1
+
+    assert rec.last_seen is None
+    assert rec.last_lost is not None
+    assert before <= rec.last_lost <= after
+
+
+def test_populate_keeps_first_seen_if_set(tmp_path):
+    header = ["Filename"]
+    sample = tmp_path / "file.txt"
+    sample.write_text("hello")
+
+    rec = EfuRecord(header, first_seen=12345)
+    before = int(time.time()) - 1
+    rec.populate_from_path(str(sample))
+    after = int(time.time()) + 1
+
+    assert rec.first_seen == 12345
+    assert rec.last_lost is None
+    assert rec.last_seen is not None
+    assert before <= rec.last_seen <= after

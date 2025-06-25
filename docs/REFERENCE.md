@@ -138,6 +138,26 @@ def objects_to_efu(
   2. Values are converted to strings with ``str()`` (``None`` -> ``''``).
   3. Delegates to `array_to_efu` for final serialization.
 
+### 2.5 `EfuRecord`
+
+`EfuRecord` represents a single EFU row and tracks when the file metadata was
+successfully retrieved or lost.
+
+* **Attributes**:
+  * `last_seen` (`int | None`): POSIX timestamp when metadata was last obtained.
+  * `first_seen` (`int | None`): Set on first successful call to
+    `populate_from_path` if it was `None`.
+  * `last_lost` (`int | None`): Timestamp recorded when metadata retrieval
+    fails (e.g., file missing).
+
+`populate_from_path(path)` fills the record fields using `os.stat` and updates
+these timestamps:
+
+1. On success, `last_seen` is set to `int(time.time())`; if `first_seen` is
+   unset, it is also set to that value.
+2. On failure, `last_lost` is set to the current time and the original
+   `OSError` is re-raised.
+
 ---
 
 ## 3. Examples
