@@ -4,7 +4,7 @@ import json
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'src'))
 
-from efu.root_cli import main as root_main
+from runtimeinfo.cli import main as root_main
 
 
 def test_root_cli_json(tmp_path, capsys):
