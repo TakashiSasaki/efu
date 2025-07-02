@@ -1,23 +1,23 @@
 [tool.poetry]
-name = "efu"
+name = "runtimeinfo"
 version = "0.1.1"
-description = "Custom CSV parser and serializer for Everything EFU files"
+description = "Utilities for capturing runtime host information"
 authors = ["Takashi Sasaki <takashi316@gmail.com>"]
 readme = "README.md"
 packages = [
-    {include = "efu", from = "src"},
+    {include = "runtimeinfo", from = "src"},
 ]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+jcs = ">=0.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = {version = "^6.0", python = ">=3.8.1"}
 pytest = "^8.0"
-httpimport = "^1.4"
 
 [tool.poetry.scripts]
-efu = "efu:main"
+runtimeinfo = "runtimeinfo.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
