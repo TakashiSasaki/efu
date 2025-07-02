@@ -4,7 +4,10 @@ version = "0.1.1"
 description = "Custom CSV parser and serializer for Everything EFU files"
 authors = ["Takashi Sasaki <takashi316@gmail.com>"]
 readme = "README.md"
-packages = [{include = "efu", from = "src"}]
+packages = [
+    {include = "efu", from = "src"},
+    {include = "runtimeinfo", from = "src"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -17,7 +20,7 @@ httpimport = "^1.4"
 
 [tool.poetry.scripts]
 efu = "efu:main"
-efu_root = "efu.root_cli:main"
+runtimeinfo = "runtimeinfo.cli:main"
 
 [build-system]
 requires = ["poetry-core"]

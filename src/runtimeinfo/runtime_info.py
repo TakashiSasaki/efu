@@ -10,7 +10,7 @@ import ipaddress
 import getpass
 
 
-class Root:
+class RuntimeInfo:
     """Information about a machine and path."""
 
     def __init__(self, path: Optional[str] = None) -> None:
